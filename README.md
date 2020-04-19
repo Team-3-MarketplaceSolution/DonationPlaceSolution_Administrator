@@ -1,4 +1,4 @@
-# DonationPlaceSolution
+# DonationPlaceSolution--Administrator Version
 #Mobile Application 
 #React Native App
 Apple + Android
