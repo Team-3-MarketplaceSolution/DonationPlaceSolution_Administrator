@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, TextInput, TouchableOpacity,StyleSheet, Button} from 'react-native';
+import { Image, View, Text, TextInput, TouchableOpacity,StyleSheet, Button} from 'react-native';
 import StaticContainer from "react-native-web/src/vendor/react-native/StaticContainer";
 import * as firebase from "firebase";
 import Colors from "../constants/Colors";
@@ -34,6 +34,8 @@ export default class LoginScreen extends React.Component{
     render() {
         return (
             <View style={styles.container}>
+                <Image style={{padding:50}} source={require('../assets/images/D_logo.png')}/>
+                <Text style={{color: Colors.buttonColor, padding:20, fontSize: '20em',fontWeight:'bold'}}>Administrator Portal</Text>
                 <Text>{this.state.errorMessage}</Text>
                 <TextInput
                     style={styles.textInput}
