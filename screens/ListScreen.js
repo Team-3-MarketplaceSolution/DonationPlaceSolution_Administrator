@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,ScrollView, Text, StyleSheet} from 'react-native';
+import {View, ScrollView, Text, StyleSheet} from 'react-native';
 import * as firebase from "firebase";
 import {
     Container,
@@ -27,29 +27,35 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 export default class ListScreen extends React.Component {
     state = {
         listID: "",
-        shirts: "",
+        shirts: 0,
         inHonorOf: "",
-        jackets: "",
-        pants: "",
+        jackets: 0,
+        pants: 0,
         status: "Created",
-        sweaters: "",
-        values:{},
+        sweaters: 0,
+        values: {},
     }
+    onMinusClicked = () =>{
+
+    };
+
+    onPlusClicked =() =>{
+
+    };
 
 
     componentDidMount() {
         const myListID = this.props.navigation.getParam('listId');
-        console.log('listID',myListID);
+        console.log('listID', myListID);
         const myUID = this.props.navigation.getParam('uid');
         this.setState({listID: myListID});
-        console.log(this.state);
 
-        firebase.database().ref('Lists/' +myUID + '/' + myListID).on('value', (data) => {
+        firebase.database().ref('Lists/' + myUID + '/' + myListID).on('value', (data) => {
             this.setState(data.val());
         })
 
         firebase.database().ref('Values').on('value', (data) => {
-            this.setState({values:data.val()});
+            this.setState({values: data.val()});
         })
         console.log(this.state);
     }
@@ -57,36 +63,51 @@ export default class ListScreen extends React.Component {
 
     render() {
         let honor;
-        if(this.state.inHonorOf){
+        if (this.state.inHonorOf) {
             honor = <Card><Text style={style.cardText}>Donation In Honor Of: {this.state.inHonorOf}</Text></Card>;
         }
         let lists;
-        let sum =0;
+        let sum = 0;
         return (
             <ScrollView>
                 <Card style={{marginBottom: 15,}}>
-                    <CardItem header style={{backgroundColor: '#b4db9c',}}><Icon style={{margin: 'auto', fontSize: 28 }} name="clipboard-list"/>
+                    <CardItem header style={{backgroundColor: '#b4db9c',}}><Icon style={{margin: 'auto', fontSize: 28}}
+                                                                                 name="clipboard-list"/>
                         <Text style={style.titleText}>List: {this.state.listID}</Text></CardItem>
                 </Card>
 
-                {Object.entries(this.state).map((item)=> {
-                    if ((item[0] === 'jackets' || item[0]==='pants'||item[0]==='sweaters' ||item[0]==='shirts') && item[1]){
+                {Object.entries(this.state).map((item) => {
+                    if ((item[0] === 'jackets' || item[0] === 'pants' || item[0] === 'sweaters' || item[0] === 'shirts') && item[1]) {
                         let price = this.state.values[item[0]];
                         sum += item[1] * price;
                         console.log(sum);
 
                         return (<Card key={item[0]}>
                             <CardItem>
-                                <Left ><View style={{backgroundColor:'#e9f5ec', width:60, height:60, justifyContent: 'center', alignItems: 'center' }}>
-                                    <Icon style={{margin: 'auto', fontSize: 28 }} name="tshirt"/>
+                                <Left><View style={{
+                                    backgroundColor: '#e9f5ec',
+                                    width: 60,
+                                    height: 60,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <Icon style={{margin: 'auto', fontSize: 28}} name="tshirt"/>
                                 </View>
                                 </Left>
-                                <Body style={{ marginStart: -30}}><Text style={style.cardTitleText}>{item[0]}</Text>
+                                <Body style={{marginStart: -30}}><Text style={style.cardTitleText}>{item[0]}</Text>
                                     <Text style={style.cardSubTitleText}>${price}</Text>
                                 </Body>
-                                <Right><Badge style={{ backgroundColor: Colors.buttonColor }}>
-                                    <Text>   {item[1]}   </Text>
-                                </Badge></Right>
+                                <Right>
+                                    <View style = {{flex: 1, flexDirection:'row', alignItems:'center'}}>
+                                        <Icon style={{margin: 'auto', padding:10}} name="minus" onPress={()=> {this.setState({[`${item[0]}`] : +this.state[item[0]]-1})}}/>
+
+                                        <Badge style={{backgroundColor: Colors.buttonColor}}>
+                                            <Text>   {item[1]}   </Text>
+                                        </Badge>
+                                        <Icon style={{margin: 'auto', padding: 10}} name="plus" onPress={()=> {this.setState({[`${item[0]}`] : +this.state[item[0]]+1})}}/>
+                                    </View>
+
+                                </Right>
                             </CardItem>
 
                         </Card>);
@@ -103,34 +124,34 @@ export default class ListScreen extends React.Component {
 
 const style = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
-    cardText:{
-        textAlign:'center',
+    cardText: {
+        textAlign: 'center',
         padding: 15
     },
-    cardTitleText:{
+    cardTitleText: {
         fontSize: 20,
-        textAlign:'left',
-        padding:5,
+        textAlign: 'left',
+        padding: 5,
     },
-    cardSubTitleText:{
+    cardSubTitleText: {
         fontSize: 15,
-        textAlign:'left',
-        padding:5,
+        textAlign: 'left',
+        padding: 5,
     },
-    titleText:{
+    titleText: {
         fontWeight: 'bold',
         fontSize: 15,
-        textAlign:'center',
+        textAlign: 'center',
         padding: 10
     },
-    boldText:{
-        fontWeight:'bold',
-        textAlign:'center',
+    boldText: {
+        fontWeight: 'bold',
+        textAlign: 'center',
         padding: 15
     }
 
-})
+});

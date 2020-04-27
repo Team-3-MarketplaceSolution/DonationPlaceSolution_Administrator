@@ -89,7 +89,7 @@ const ItemStack = createStackNavigator(
 
 
 ItemStack.navigationOptions = {
-    tabBarLabel: 'Items',
+    tabBarLabel: 'Scan',
     tabBarIcon: ({focused}) => (
         <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}/>
     ),

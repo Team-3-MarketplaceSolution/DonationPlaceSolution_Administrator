@@ -54,7 +54,7 @@ const SearchListPage = ({navigation}) => {
 }
 
 SearchListPage.navigationOptions = {
-    title: 'Items',
+    title: 'Scan',
 };
 
 const styles = StyleSheet.create({
