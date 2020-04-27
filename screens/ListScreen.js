@@ -29,7 +29,7 @@ export default class ListScreen extends React.Component {
         listID: "",
         shirts: "",
         inHonorOf: "",
-        jackets: "8",
+        jackets: "",
         pants: "",
         status: "Created",
         sweaters: "",
@@ -38,12 +38,13 @@ export default class ListScreen extends React.Component {
 
 
     componentDidMount() {
-        const myListID = this.props.navigation.getParam('listID');
+        const myListID = this.props.navigation.getParam('listId');
+        console.log('listID',myListID);
+        const myUID = this.props.navigation.getParam('uid');
         this.setState({listID: myListID});
-        console.log(this.state); 
-        console.log(myListID);
+        console.log(this.state);
 
-        firebase.database().ref('Lists/' +firebase.auth().currentUser.uid + '/' + myListID).on('value', (data) => {
+        firebase.database().ref('Lists/' +myUID + '/' + myListID).on('value', (data) => {
             this.setState(data.val());
         })
 

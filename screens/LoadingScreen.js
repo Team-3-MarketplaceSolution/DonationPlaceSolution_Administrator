@@ -11,7 +11,7 @@ export default class LoadingScreen extends React.Component {
 
             if (user != null) {
                 firebase.database().ref('Admins/' + user.uid).once("value")
-                    .then( (snapshot) =>{
+                    .then((snapshot) => {
                         this.setState({isAdmin: snapshot.exists()});
                     });
             } else {
@@ -20,8 +20,9 @@ export default class LoadingScreen extends React.Component {
 
             console.log('isAdmin', this.state.isAdmin);
             let emailVerified;
-            emailVerified=user?user.emailVerified: null;
+            emailVerified = user ? user.emailVerified : null;
             this.props.navigation.navigate((emailVerified && this.state.isAdmin && user) ? "Main" : "Auth")
+            // this.props.navigation.navigate("Main");
             user ? console.log('Email Verified', user.emailVerified) : null;
         })
     }

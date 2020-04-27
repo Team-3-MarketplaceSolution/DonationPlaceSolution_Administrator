@@ -43,6 +43,7 @@ HomeStack.path = '';
 const LinksStack = createStackNavigator(
     {
         Links: LinksScreen,
+
     },
     config
 );
@@ -61,9 +62,6 @@ const ProfileStack = createStackNavigator(
     {
         Profile: ProfileScreen,
         EditProfile: EditProfileScreen,
-        MyDonation: MyDonationScreen,
-        List: ListScreen,
-
     },
 
     config
@@ -84,6 +82,7 @@ ProfileStack.path = '';
 const ItemStack = createStackNavigator(
     {
         Search: SearchListPage,
+        List: ListScreen,
     },
     config
 );

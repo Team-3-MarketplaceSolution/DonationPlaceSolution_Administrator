@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {ExpoConfigView} from '@expo/samples';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import * as firebase from "firebase";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -24,11 +23,6 @@ export default class ProfileScreen extends React.Component {
 
     onEditProfileButtonClicked = () => {
         this.props.navigation.navigate('EditProfile', {
-            uid: this.state.uid,
-        })
-    }
-    onMyDonationButtonClicked = () => {
-        this.props.navigation.navigate('MyDonation', {
             uid: this.state.uid,
         })
     }

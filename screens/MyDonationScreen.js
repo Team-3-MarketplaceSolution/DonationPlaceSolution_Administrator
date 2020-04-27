@@ -2,21 +2,16 @@ import React from 'react';
 import {StyleSheet,Text, TextInput, TouchableOpacity, View} from 'react-native';
 import * as firebase from "firebase";
 import {
-    Container,
     List,
-    Content,
     ListItem,
-    Card,
-    CardItem,
-    Thumbnail,
-
 } from "native-base";
 import Colors from "../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default class MyDonationScreen extends React.Component {
     state = {
-        lists: [],
+        uid: '',
+        listID:'',
     };
 
     componentDidMount() {
