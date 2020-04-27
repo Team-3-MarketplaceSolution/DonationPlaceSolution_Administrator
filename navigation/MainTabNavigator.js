@@ -7,7 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from "../screens/EditProfileScreen";
-import FormGenerator from '../screens/SearchListPage';
+import SearchListPage from '../screens/SearchListPage';
 import MyDonationScreen from "../screens/MyDonationScreen";
 import ListScreen from "../screens/ListScreen";
 import Colors from "../constants/Colors";
@@ -83,7 +83,7 @@ ProfileStack.path = '';
 
 const ItemStack = createStackNavigator(
     {
-        Profile: FormGenerator,
+        Search: SearchListPage,
     },
     config
 );

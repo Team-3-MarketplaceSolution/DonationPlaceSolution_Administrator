@@ -1,71 +1,49 @@
-import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-import { View, Text, Button } from 'native-base';
-import GenerateForm from 'react-native-form-builder';
-import * as firebase from "firebase";
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions';
 
-const styles = {
-  wrapper: {
-    flex: 1,
-    marginTop: 150,
-  },
-  submitButton: {
-    paddingHorizontal: 10,
-    paddingTop: 20,
-  },
-};
+const SearchListPage = () => {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+      console.log(status);
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
-const fields = [
-  {
-    type: 'number',
-    name: 'shirts',
-    label: 'Shirts',
-  },
-    {
-    type: 'number',
-    name: 'pants',
-    label: 'Pants',
-  },
-    {
-    type: 'number',
-    name: 'jackets',
-    label: 'Jackets',
-  },
-    {
-    type: 'number',
-    name: 'sweaters',
-    label: 'Sweaters',
-  },
-  {
-    type: 'text',
-    name: 'inHonorOf',
-    label: 'Donate in Honor of Someone?',
-  },
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+  };
 
-];
-
-export default class FormGenerator extends Component {
-  add() {
-    const formValues = {...this.formGenerator.getValues(), status:"Created"};
-    console.log('FORM VALUES', formValues);
-    console.log(this.formGenerator.getValues());
-    firebase.database().ref('Lists/'+firebase.auth().currentUser.uid).push(formValues).then((data)=>{
-      //success callback
-      alert("List Created");
-      console.log('data ' , data)
-    }).catch(error => console.log(error));
-
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
   }
-  render() {
-    return (
-      <View style={styles.wrapper}>
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
+  return (
+      <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+          }}>
+        <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+        />
+
+        {scanned && (
+            <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
+        )}
       </View>
-    );
-  }
+  );
 }
 
-AppRegistry.registerComponent('FormGenerator', () => FormGenerator);
-
-
+export default SearchListPage;
