@@ -2,13 +2,8 @@ import React from 'react';
 import {View, ScrollView, Text, StyleSheet} from 'react-native';
 import * as firebase from "firebase";
 import {
-    Container,
-    List,
-    Content,
-    ListItem,
     Card,
     CardItem,
-    Thumbnail,
     Badge,
     Right,
     Body,
@@ -17,6 +12,7 @@ import {
 } from "native-base";
 import Colors from "../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import SubmitButton from "../components/SubmitButton";
 
 // const icons = {
 //     shirts:'tshirt',
@@ -26,6 +22,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 
 export default class ListScreen extends React.Component {
     state = {
+        uid: "",
         listID: "",
         shirts: 0,
         inHonorOf: "",
@@ -35,20 +32,32 @@ export default class ListScreen extends React.Component {
         sweaters: 0,
         values: {},
     }
-    onMinusClicked = () =>{
 
-    };
 
-    onPlusClicked =() =>{
+    onVerifyButtonClicked = () => {
+        const Values = {
+            shirts: this.state.shirts,
+            jackets: this.state.jackets,
+            pants: this.state.pants,
+            sweaters: this.state.sweaters,
+            status: 'Verified'
+        };
+
+        firebase.database().ref('Lists/' + this.state.uid +'/' +this.state.listID).update(Values).then((data) => {
+            //success callback
+            alert("List Verified");
+            console.log('data ', data);
+        }).catch(error => console.log(error));
 
     };
 
 
     componentDidMount() {
         const myListID = this.props.navigation.getParam('listId');
-        console.log('listID', myListID);
         const myUID = this.props.navigation.getParam('uid');
-        this.setState({listID: myListID});
+        console.log('listID', this.state.listID);
+        console.log('uid', this.state.uid);
+        this.setState({uid: myUID, listID: myListID});
 
         firebase.database().ref('Lists/' + myUID + '/' + myListID).on('value', (data) => {
             this.setState(data.val());
@@ -66,13 +75,20 @@ export default class ListScreen extends React.Component {
         if (this.state.inHonorOf) {
             honor = <Card><Text style={style.cardText}>Donation In Honor Of: {this.state.inHonorOf}</Text></Card>;
         }
-        let lists;
+
+        let verifyButton;
+        if (this.state.status != "Verified") {
+            verifyButton = <View style={{alignItems: 'center'}}><SubmitButton
+                click={this.onVerifyButtonClicked}>Verify</SubmitButton></View>
+        }
+
         let sum = 0;
         return (
             <ScrollView>
+
                 <Card style={{marginBottom: 15,}}>
-                    <CardItem header style={{backgroundColor: '#b4db9c',}}><Icon style={{margin: 'auto', fontSize: 28}}
-                                                                                 name="clipboard-list"/>
+                    <CardItem header style={{backgroundColor: '#b4db9c',}}>
+                        <Icon style={{margin: 'auto', fontSize: 28}} name="clipboard-list"/>
                         <Text style={style.titleText}>List: {this.state.listID}</Text></CardItem>
                 </Card>
 
@@ -98,13 +114,18 @@ export default class ListScreen extends React.Component {
                                     <Text style={style.cardSubTitleText}>${price}</Text>
                                 </Body>
                                 <Right>
-                                    <View style = {{flex: 1, flexDirection:'row', alignItems:'center'}}>
-                                        <Icon style={{margin: 'auto', padding:10}} name="minus" onPress={()=> {this.setState({[`${item[0]}`] : +this.state[item[0]]-1})}}/>
+                                    <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                                        <Icon style={{margin: 'auto', padding: 10}} name="minus" onPress={() => {
+                                            if(this.state.status !== 'Verified'){this.setState({[`${item[0]}`]: +this.state[item[0]] - 1})}
+
+                                        }}/>
 
                                         <Badge style={{backgroundColor: Colors.buttonColor}}>
                                             <Text>   {item[1]}   </Text>
                                         </Badge>
-                                        <Icon style={{margin: 'auto', padding: 10}} name="plus" onPress={()=> {this.setState({[`${item[0]}`] : +this.state[item[0]]+1})}}/>
+                                        <Icon style={{margin: 'auto', padding: 10}} name="plus" onPress={() => {
+                                            if(this.state.status !== 'Verified'){this.setState({[`${item[0]}`]: +this.state[item[0]] + 1})}
+                                        }}/>
                                     </View>
 
                                 </Right>
@@ -116,6 +137,7 @@ export default class ListScreen extends React.Component {
                 <Card><Text style={style.boldText}>Total Value: ${sum}</Text></Card>
                 <Card><Text style={style.boldText}>Status: {this.state.status}</Text></Card>
                 {honor}
+                {verifyButton}
             </ScrollView>
         );
     }

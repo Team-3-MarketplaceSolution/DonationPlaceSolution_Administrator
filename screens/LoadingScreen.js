@@ -9,20 +9,19 @@ export default class LoadingScreen extends React.Component {
 
         firebase.auth().onAuthStateChanged(user => {
 
-            // if (user != null) {
-            //     firebase.database().ref('Admins/' + user.uid).once("value")
-            //         .then((snapshot) => {
-            //             this.setState({isAdmin: snapshot.exists()});
-            //         });
-            // } else {
-            //     this.setState({isAdmin: null})
-            // }
-            //
-            // console.log('isAdmin', this.state.isAdmin);
-            // let emailVerified;
-            // emailVerified = user ? user.emailVerified : null;
-            // this.props.navigation.navigate((emailVerified && this.state.isAdmin && user) ? "Main" : "Auth")
-            this.props.navigation.navigate("Main");
+            if (user != null) {
+                firebase.database().ref('Admins/' + user.uid).once("value")
+                    .then((snapshot) => {
+                        this.setState({isAdmin: snapshot.exists()});
+                    });
+            } else {
+                this.setState({isAdmin: null})
+            }
+
+            console.log('isAdmin', this.state.isAdmin);
+            let emailVerified;
+            emailVerified = user ? user.emailVerified : null;
+            this.props.navigation.navigate((emailVerified && this.state.isAdmin && user) ? "Main" : "Auth")
             user ? console.log('Email Verified', user.emailVerified) : null;
         })
     }
