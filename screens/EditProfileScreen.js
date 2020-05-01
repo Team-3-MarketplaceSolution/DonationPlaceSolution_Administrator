@@ -19,7 +19,7 @@ export default class EditProfileScreen extends React.Component {
 
     writeUserData = () =>{
         console.log(this.uid);
-        firebase.database().ref('Users/'+this.state.uid).update(
+        firebase.database().ref('Admins/'+this.state.uid).update(
             {
                 first_name: this.state.first_name,
                 last_name:this.state.last_name,
@@ -105,6 +105,7 @@ export default class EditProfileScreen extends React.Component {
                     value={this.state.state}
                 />
                 <TextInput
+                    keyboardType = 'numeric'
                     style={styles.textInput}
                     autoCapitalize="none"
                     placeholder="ZipCode"
