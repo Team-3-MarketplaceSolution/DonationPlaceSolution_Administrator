@@ -3,6 +3,7 @@ import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import * as firebase from "firebase";
 import Colors from "../constants/Colors";
 import SubmitButton from "../components/SubmitButton";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default class EditProfileScreen extends React.Component {
     state = {
@@ -58,6 +59,7 @@ export default class EditProfileScreen extends React.Component {
 
     render() {
         return (
+            <KeyboardAwareScrollView>
             <View style={styles.container}>
                 <Text>{this.state.errorMessage}</Text>
                 <TextInput
@@ -114,6 +116,7 @@ export default class EditProfileScreen extends React.Component {
                 />
                 <SubmitButton click = {this.handleUpdate}>Submit</SubmitButton>
             </View>
+                </KeyboardAwareScrollView>
         );
     }
 }
